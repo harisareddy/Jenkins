@@ -1,19 +1,21 @@
 pipeline {
-    agent { label 'master' }
+    agent { label 'master'}
     stages {
-        stage('stage test1'){
-            steps{
-                script {
-                    echo 'hello World'
-                }
-            }
-        }
-        stage ('stage2 for test'){
+        stage('git checkout'){
             steps{
                 script{
-                    echo 'hello World'
-                }
-            }
+                    git credentialId: 'git', url: 'https://github.com/'
+           }
+          }
+        }
+        stage('maven compile'){
+            steps{
+                script{
+                    withMaven(jdk : 'jdk8', maven : 'maven'){
+			sh 'mvn clean install'
+           }
+          }
+         }
         }
     }
 }
